@@ -1,6 +1,8 @@
 import requests
 import yaml
+from urllib import request as ur
 from fuzzywuzzy import fuzz as f 
+import moviepy.editor as mp
 
 csrf_token = ''
 host = ''
@@ -12,5 +14,10 @@ with open("config.yaml", "r") as stream:
     except yaml.YAMLError as exc:
         print(exc)
 headers ={"X-Csrf-Token":csrf_token}
-x = requests.get(host+"q=oh%20yeah%20that%27s%20right&limit=1",headers=headers)
-print(x.text)
+req = requests.get(host+"q=hello&limit=1",headers=headers)
+valid_data = req.json()
+need
+video_url = valid_data['phrases'][0]['video-url']
+ur.urlretrieve(video_url, 'video_name.mp4') 
+my_clip = mp.VideoFileClip("video_name.mp4")
+my_clip.audio.write_audiofile("my_result.mp3")
