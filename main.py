@@ -1,8 +1,8 @@
 import requests
 import yaml
+from gtts import gTTS
 from urllib import request as ur
-from fuzzywuzzy import fuzz as f 
-import moviepy.editor as mp
+from  moviepy import editor as mp
 
 config_data = None
 with open("config.yaml", "r") as stream:
@@ -18,11 +18,18 @@ headers ={"X-Csrf-Token":csrf_token}
 
 to_voice = '+'.join(input('Input text: ').split())
 print(to_voice)
-req = requests.get(host+"q=kick+my+ass&pos=1",headers=headers)
+req = requests.get(host+"q=kickasgsdgsdgds=1",headers=headers)
 valid_data = req.json()
 print(valid_data)
-for i in valid_data['phrases'][0]['words']:
-    print(i)
+if valid_data['count']:
+    for i in valid_data['phrases'][0]['words']:
+        print(i)
+else:
+    myobj = gTTS(text="Hello guys", lang="en", slow=False)
+  
+    # Saving the converted audio in a mp3 file named
+    # welcome 
+    myobj.save("welcome.mp3")
 # video_url = valid_data['phrases'][0]['video-url']
 # ur.urlretrieve(video_url, 'video_name.mp4') 
 # my_clip = mp.VideoFileClip("video_name.mp4")
