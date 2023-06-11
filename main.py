@@ -15,22 +15,32 @@ csrf_token = config_data['csrf_token']
 host = config_data['url_host']
 
 headers ={"X-Csrf-Token":csrf_token}
+input_text = input('Input text: ')
+split_text = input_text.split()
 
-to_voice = '+'.join(input('Input text: ').split())
-print(to_voice)
-req = requests.get(host+"q=kickasgsdgsdgds=1",headers=headers)
-valid_data = req.json()
-print(valid_data)
-if valid_data['count']:
-    for i in valid_data['phrases'][0]['words']:
-        print(i)
-else:
-    myobj = gTTS(text="Hello guys", lang="en", slow=False)
+for i in range(0,len(input_text.split())):
+    flag = False
+    for j in range(len(input_text.split()),i,-1):
+        url_format = '+'.join(split_text[i:j])
+        req = requests.get(host+f"q={url_format}&pos=1",headers=headers)
+        valid_data = req.json()
+        if valid_data['count']:
+            print(split_text[i:j])
+            flag = True
+    if not flag:    
+        myobj = gTTS(text=split_text[i:j], lang="en", slow=False)
+        myobj.save(f"welcome{str(i)}.mp3")
+# print(valid_data)
+# if valid_data['count']:
+#     for i in valid_data['phrases'][0]['words']:
+#         print(i)
+# else:
+#     myobj = gTTS(text=input_text, lang="en", slow=False)
   
-    # Saving the converted audio in a mp3 file named
-    # welcome 
-    myobj.save("welcome.mp3")
-# video_url = valid_data['phrases'][0]['video-url']
-# ur.urlretrieve(video_url, 'video_name.mp4') 
-# my_clip = mp.VideoFileClip("video_name.mp4")
-# my_clip.audio.write_audiofile("my_result.mp3")
+#     # Saving the converted audio in a mp3 file named
+#     # welcome 
+#     
+# # video_url = valid_data['phrases'][0]['video-url']
+# # ur.urlretrieve(video_url, 'video_name.mp4') 
+# # my_clip = mp.VideoFileClip("video_name.mp4")
+# # my_clip.audio.write_audiofile("my_result.mp3")
