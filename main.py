@@ -1,5 +1,6 @@
 import requests
 import yaml
+import logging
 from gtts import gTTS
 from urllib import request as ur
 from  moviepy import editor as mp
