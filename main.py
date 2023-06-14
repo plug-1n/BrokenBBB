@@ -5,19 +5,20 @@ from gtts import gTTS
 from urllib import request as ur
 from  moviepy import editor as mp
 
-config_data = None
-with open("config.yaml", "r") as stream:
-    try:
-        config_data = yaml.safe_load(stream)
-    except yaml.YAMLError as exc:
-        print(exc)
+def config():
+    config_data = None
+    with open("config.yaml", "r") as stream:
+        try:
+            config_data = yaml.safe_load(stream)
+        except yaml.YAMLError as exc:
+            print(exc)
 
-csrf_token = config_data['csrf_token']
-host = config_data['url_host']
+    csrf_token = config_data['csrf_token']
+    host = config_data['url_host']
 
-headers ={"X-Csrf-Token":csrf_token}
-input_text = input('Input text: ')
-split_text = input_text.split()
+    headers ={"X-Csrf-Token":csrf_token}
+    input_text = input('Input text: ')
+    split_text = input_text.split()
 
 for i in range(0,len(input_text.split())):
     flag = False
