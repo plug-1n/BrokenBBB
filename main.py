@@ -2,11 +2,27 @@ import sys
 import logging
 import random
 import requests
+import urllib
 from views import get_config_yaml
+from moviepy.editor import VideoFileClip, concatenate_videoclips
+
 
 
 TOKEN, URL_HOST = get_config_yaml('config.yaml')
 HEADERS = {"X-Csrf-Token":TOKEN}
+
+
+def save_video_from_bytes(video_bytes, filename):
+    with open(filename, "wb") as file:
+        file.write(video_bytes)
+
+def get_video(url):
+    try:
+        with urllib.request.urlopen(url) as response:
+            video_data = response.read()
+        return video_data
+    except urllib.error.URLError as e:
+        print("Error:", e)
 
 def play_phrase_api(phrase):
     url_request = URL_HOST + f"q={'+'.join(phrase)}"
@@ -16,6 +32,13 @@ def play_phrase_api(phrase):
         return False
     
     video_info = random.choice(body['phrases'])
+    need_words = []
+    for word in video_info['words']:
+        if word['searched?']:
+            need_words.append(word)
+    video_bytes = get_video(video_info['video-url'])
+    return video_bytes
+
 
 def main():
     input_text = input('Input text: ').split()
@@ -26,7 +49,9 @@ def main():
     size = len(input_text)
 
     frames = []
-    play_phrase_api(input_text)
+    start = 0
+
+    
 
 
 
