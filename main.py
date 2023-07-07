@@ -1,3 +1,4 @@
+import io
 import sys
 import logging
 import random
@@ -13,9 +14,13 @@ TOKEN, URL_HOST = get_config_yaml('config.yaml')
 HEADERS = {"X-Csrf-Token":TOKEN}
 
 
-def save_video_from_bytes(video_bytes, filename):
-    with open(filename, "wb") as file:
-        file.write(video_bytes)
+def save_video_from_bytes(video_bytes_list, output_filename):
+    output_file = io.BytesIO()
+    for part in video_bytes_list:
+        output_file.write(part)
+        
+    with open(output_filename, "wb") as file:
+        file.write(output_file.getvalue())
 
 def get_video(url):
     try:
@@ -59,7 +64,6 @@ def main():
             print(input_text[start:i])
             video_bytes = play_phrase_api(input_text[start:i])
             if video_bytes:
-                save_video_from_bytes(video_bytes,"hello.mp4")
                 frames.append(video_bytes)
                 print("SUI")
                 flag = True
@@ -69,7 +73,7 @@ def main():
             print("CMEREA VOVO")
         start+=1
     
-    #final_clip = concatenate_videoclips(frames)
+    save_video_from_bytes(frames,"ed.mp4")
 
     
 
