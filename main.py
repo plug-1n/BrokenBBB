@@ -1,4 +1,3 @@
-import io
 import sys
 import logging
 import random
@@ -14,13 +13,12 @@ TOKEN, URL_HOST = get_config_yaml('config.yaml')
 HEADERS = {"X-Csrf-Token":TOKEN}
 
 
-def save_video_from_bytes(video_bytes_list, output_filename):
-    output_file = io.BytesIO()
-    for part in video_bytes_list:
-        output_file.write(part)
-        
-    with open(output_filename, "wb") as file:
-        file.write(output_file.getvalue())
+def save_video_from_bytes(video_bytes,filename="arina.mp4"):
+    a = bytearray()
+    for part in video_bytes:
+        a.append(a)
+    with open(filename, "wb") as filename:
+        filename.write(bytes(a))
 
 def get_video(url):
     try:
@@ -73,7 +71,7 @@ def main():
             print("CMEREA VOVO")
         start+=1
     
-    save_video_from_bytes(frames,"ed.mp4")
+    save_video_from_bytes(frames)
 
     
 
