@@ -12,13 +12,16 @@ from moviepy.editor import VideoFileClip, concatenate_videoclips
 TOKEN, URL_HOST = get_config_yaml('config.yaml')
 HEADERS = {"X-Csrf-Token":TOKEN}
 
+def concatinate_videos(frames):
+    file_clips = []
+    for frame in frames:
+        file_clips.append(VideoFileClip(frame))
+    final_clip = concatenate_videoclips(file_clips)    
+    final_clip.write_videofile('output.mp4')
 
-def save_video_from_bytes(video_bytes,filename="arina.mp4"):
-    a = bytearray()
-    for part in video_bytes:
-        a.append(a)
+def save_video_from_bytes(video_bytes,filename):
     with open(filename, "wb") as filename:
-        filename.write(bytes(a))
+        filename.write(video_bytes)
 
 def get_video(url):
     try:
@@ -56,13 +59,17 @@ def main():
 
     start = 0
     end = size
+    cnt = 0
     while start<end:
         flag = False
         for i in range(end, start,-1):
             print(input_text[start:i])
             video_bytes = play_phrase_api(input_text[start:i])
             if video_bytes:
-                frames.append(video_bytes)
+                cnt+=1
+                filename = f'video{cnt}.mp4'
+                save_video_from_bytes(video_bytes,filename)
+                frames.append(filename)
                 print("SUI")
                 flag = True
                 start = i - 1
@@ -70,8 +77,9 @@ def main():
         if not flag:
             print("CMEREA VOVO")
         start+=1
+    concatinate_videos(frames)
     
-    save_video_from_bytes(frames)
+   
 
     
 
